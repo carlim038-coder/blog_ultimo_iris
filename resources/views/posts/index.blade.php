@@ -1,30 +1,58 @@
 <x-layout>
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 text-dark fw-bold">Tutti i Post</h1>
-        <a href="{{ route('posts.create') }}" class="btn btn-success shadow-sm">
-            ➕ Crea Nuovo Post
-        </a>
-    </div>
+    <div class="container my-4">
 
-    @if(count($posts) > 0)
-        <div class="row">
-            @foreach($posts as $post)
-                <div class="col-12 mb-3">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body">
-                            <h3 class="card-title h5 text-primary fw-bold">{{ $post->title }}</h3>
-                            <p class="card-text text-secondary">{{ $post->content }}</p>
-                            <div class="text-end">
-                                <small class="text-muted">Pubblicato il: {{ $post->created_at->format('d/m/Y H:i') }}</small>
-                            </div>
-                        </div>
+        <!-- Messaggio di successo in stile Aulab -->
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show shadow-sm border-0 mb-4" role="alert">
+                <div class="d-flex align-items-center">
+                    <span class="fs-4 me-2">🎉</span>
+                    <div>
+                        <strong>Ottimo lavoro!</strong> {{ session('success') }}
                     </div>
                 </div>
-            @endforeach
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        <!-- Intestazione della pagina -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 fw-bold text-dark">Tutti i Post</h1>
+            <a href="{{ route('posts.create') }}" class="btn btn-success shadow-sm">
+                + Crea Nuovo Post
+            </a>
         </div>
-    @else
-        <div class="alert alert-info text-center shadow-sm" role="alert">
-            Non ci sono post disponibili al momento. Creane uno adesso!
-        </div>
-    @endif
+
+        <!-- Lista dei post -->
+        @foreach($posts as $post)
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-body">
+                    
+                    <!-- Controllo e visualizzazione dell'immagine se esiste -->
+                    @if($post->image)
+                        <div class="mb-3">
+                            <img src="{{ asset('storage/' . $post->image) }}" alt="Immagine post" class="img-fluid rounded" style="max-height: 250px; object-fit: cover; width: 100%;">
+                        </div>
+                    @endif
+
+                    <h2 class="h5 fw-bold text-primary">{{ $post->title }}</h2>
+                    <p class="text-secondary">{{ $post->content }}</p>
+
+                    <!-- Sezione inferiore con Data e Pulsante Elimina -->
+                    <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                        <small class="text-muted">Pubblicato il: {{ $post->created_at->format('d/m/Y H:i') }}</small>
+
+                        <!-- Form per l'eliminazione -->
+                        <form action="{{ route('posts.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questo post?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                🗑️ Elimina
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        @endforeach
+    </div>
 </x-layout>

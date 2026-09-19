@@ -9,6 +9,10 @@ class Post extends Model
 {
     use HasFactory;
 
-    // Aggiungi questa riga per autorizzare i campi del form
-    protected $fillable = ['title', 'content'];
+    // Campi che possono essere salvati tramite form
+    protected $fillable = [
+        'title',
+        'content',
+        'image',
+    ];
 }
