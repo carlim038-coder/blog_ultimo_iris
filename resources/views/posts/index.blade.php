@@ -1,7 +1,7 @@
 <x-layout>
     <div class="container my-4">
 
-        <!-- Messaggio di successo in stile Aulab -->
+        <!-- Messaggio di successo -->
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show shadow-sm border-0 mb-4" role="alert">
                 <div class="d-flex align-items-center">

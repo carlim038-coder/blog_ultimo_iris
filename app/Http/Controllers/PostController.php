@@ -40,7 +40,7 @@ class PostController extends Controller
         // 3. Salvataggio effettivo nel Database
         Post::create($validatedData);
 
-        // 4. Reindirizzamento alla lista con il messaggio di successo in stile Aulab
+        // 4. Reindirizzamento alla lista con il messaggio di successo 
         return redirect()->route('posts.index')->with('success', 'Il post è stato creato correttamente!');
     }
 
