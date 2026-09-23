@@ -17,9 +17,12 @@
         <!-- Intestazione della pagina -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1 class="h3 fw-bold text-dark">Tutti i Post</h1>
-            <a href="{{ route('posts.create') }}" class="btn btn-success shadow-sm">
-                + Crea Nuovo Post
-            </a>
+            
+            @auth
+                <a href="{{ route('posts.create') }}" class="btn btn-success shadow-sm">
+                    + Crea Nuovo Post
+                </a>
+            @endauth
         </div>
 
         <!-- Lista dei post -->
@@ -37,18 +40,27 @@
                     <h2 class="h5 fw-bold text-primary">{{ $post->title }}</h2>
                     <p class="text-secondary">{{ $post->content }}</p>
 
-                    <!-- Sezione inferiore con Data e Pulsante Elimina -->
+                    <!-- Sezione inferiore con Data e Pulsanti CRUD -->
                     <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
                         <small class="text-muted">Pubblicato il: {{ $post->created_at->format('d/m/Y H:i') }}</small>
 
-                        <!-- Form per l'eliminazione -->
-                        <form action="{{ route('posts.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questo post?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-outline-danger btn-sm">
-                                🗑️ Elimina
-                            </button>
-                        </form>
+                        @auth
+                            <div class="d-flex align-items-center gap-2">
+                                <!-- Tasto Modifica -->
+                                <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-outline-warning btn-sm">
+                                    ✏️ Modifica
+                                </a>
+
+                                <!-- Form per l'eliminazione -->
+                                <form action="{{ route('posts.destroy', $post->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Sei sicuro di voler eliminare questo post?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        🗑️ Elimina
+                                    </button>
+                                </form>
+                            </div>
+                        @endauth
                     </div>
 
                 </div>
